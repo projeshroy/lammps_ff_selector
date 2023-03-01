@@ -1,0 +1,7 @@
+#  i    j    k    l            coefficients. Since these functions are periodic of the form 1-cos(2*x), they are actually implemented as proper dihedrals [1+cos(2*x+180)] for the moment, to keep things compatible.
+ O*    C*    *    *            180.0     43.93200   2
+ *     NO    ON   NO           180.0     43.93200   2
+ N2    *     N2   N2           180.0     43.93200   2
+ *     N*    *    *            180.0      4.18400   2
+ *     CM    *    *            180.0     62.76000   2
+ *     CA    *    *            180.0      4.60240   2
