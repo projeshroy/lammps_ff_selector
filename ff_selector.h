@@ -1,4 +1,5 @@
-Mat_d get_coeffs(Mat_s& quary_atom_type, std::string ff_file_address){
+template <class T>
+Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> get_coeffs(std::string ff_file_address, Mat_s& quary_atom_type){
 //IMP: Do not mix quary and force field types !  
 //If you have pair-style quary then choose pair-style force field only (not bond/angle/ etc.) and vice versa !
 
@@ -8,8 +9,8 @@ Mat_d get_coeffs(Mat_s& quary_atom_type, std::string ff_file_address){
 	int ff_count, ff_coeff_count;
 	Mat_s ff_atom_type;
 	Vec_s ff_atom_type_combined;
-	Mat_d ff_coeff;
-	Vec_d nan_vector;
+	Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> ff_coeff;
+	Eigen::Matrix<T, Eigen::Dynamic, 1> nan_vector;
 
 	ff_file >> ff_count >> ff_coeff_count; 
 	std::cout << " ff_count " << ff_count << " ff_coeff_count " << ff_coeff_count << std::endl;
@@ -38,7 +39,7 @@ Mat_d get_coeffs(Mat_s& quary_atom_type, std::string ff_file_address){
 		}
 	}
 	
-	Mat_d target_ff_coeff; 
+	Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> target_ff_coeff; 
 	target_ff_coeff.resize(quary_atom_type.rows(), ff_coeff_count);
 
 	for(int i = 0; i < quary_atom_type.rows(); i++){
@@ -63,3 +64,23 @@ Mat_d get_coeffs(Mat_s& quary_atom_type, std::string ff_file_address){
 	return target_ff_coeff;
 }
 
+template <class T>
+void write_coeff(std::ofstream& ff_coeff_file, std::string& quary_type, Mat_s& quary_atom_type, Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>& target_coeffs){
+
+	int quary_type_count = quary_atom_type.rows();
+	int ff_type_count = quary_atom_type.cols();
+	int coeff_count = target_coeffs.cols();	
+	ff_coeff_file << "quary_type " << quary_type << std::endl;
+
+	for(int i = 0; i < quary_type_count; i++){
+		for(int j = 0; j < coeff_count; j++)
+			ff_coeff_file << " " << std::setfill(' ') << std::setw(10) << target_coeffs(i, j);	
+			ff_coeff_file << "  #  ";
+
+		for(int j = 0; j < ff_type_count; j++)
+			ff_coeff_file << " " << std::setfill(' ') << std::setw(10) << quary_atom_type(i, j);
+		ff_coeff_file << std::endl; 
+	}
+
+	ff_coeff_file << std::endl;
+}
