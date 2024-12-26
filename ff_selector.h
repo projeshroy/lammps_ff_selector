@@ -73,8 +73,10 @@ void write_coeff(std::ofstream& ff_coeff_file, std::string& quary_type, Mat_s& q
 	ff_coeff_file << "quary_type " << quary_type << std::endl;
 
 	for(int i = 0; i < quary_type_count; i++){
+		ff_coeff_file << " " << i+1;
+	
 		for(int j = 0; j < coeff_count; j++)
-			ff_coeff_file << " " << std::setfill(' ') << std::setw(10) << target_coeffs(i, j);	
+			ff_coeff_file << " " << std::setfill(' ') << std::setw(10) << target_coeffs(i, j);
 			ff_coeff_file << "  #  ";
 
 		for(int j = 0; j < ff_type_count; j++)
